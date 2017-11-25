@@ -58,16 +58,15 @@ class RocksdbConan(ConanFile):
                     env_build.make(["static_lib"])  # $ make static_lib
 
     def package(self):
-        with tools.chdir(self.subfolder):
-            self.copy("LICENSE.Apache", keep_path=False)
-            self.copy("LICENSE.leveldb", keep_path=False)
+        self.copy("LICENSE.Apache", src=self.subfolder, keep_path=False)
+        self.copy("LICENSE.leveldb", src=self.subfolder, keep_path=False)
 
-            self.copy("*.h", dst="include", src="include/rocksdb")
+        self.copy("*.h", dst="include", src=("%s/include/rocksdb" % self.subfolder))
 
-            if self.options.shared:
-                self.copy("librocksdb.so", dst="lib", keep_path=False)
-            else:
-                self.copy("librocksdb.a", dst="lib", keep_path=False)
+        if self.options.shared:
+            self.copy("librocksdb.so", dst="lib", src=self.subfolder, keep_path=False)
+        else:
+            self.copy("librocksdb.a", dst="lib", src=self.subfolder, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["rocksdb"]
