@@ -36,7 +36,14 @@ class RocksdbConan(ConanFile):
         return "rocksdb-%s" % self.version
 
     def build(self):
-        self.unix_build()
+        if tools.os_info.is_windows:
+            self.windows_build()
+        else:
+            self.unix_build()
+
+    def windows_build(self):
+        # TODO
+        True
 
     def unix_build(self):
         with tools.chdir(self.subfolder):
