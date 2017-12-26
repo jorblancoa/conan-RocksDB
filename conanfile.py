@@ -26,7 +26,6 @@ class RocksdbConan(ConanFile):
     def source(self):
         self.output.info("Downloading %s" %self.source_tgz)
         tools.download(self.source_tgz, "rocksdb.tar.gz")
-        tools.check_sha256("rocksdb.tar.gz", "d8361d19b3d3e5d7a97c6427b7e39d136541dd88ee58b239ee730bb506a6c9f2")
 
         tools.unzip("rocksdb.tar.gz")
         os.remove("rocksdb.tar.gz")
@@ -48,6 +47,8 @@ class RocksdbConan(ConanFile):
     def unix_build(self):
         with tools.chdir(self.subfolder):
             env_build = AutoToolsBuildEnvironment(self)
+            env_build.fpic = True
+            env_build.libs.append("pthread")
 
             if self.settings.build_type == "Debug":
                 env_build.make()  # $ make
@@ -61,7 +62,7 @@ class RocksdbConan(ConanFile):
         self.copy("LICENSE.Apache", src=self.subfolder, keep_path=False)
         self.copy("LICENSE.leveldb", src=self.subfolder, keep_path=False)
 
-        self.copy("*.h", dst="include", src=("%s/include/rocksdb" % self.subfolder))
+        self.copy("*.h", dst="include", src=("%s/include" % self.subfolder))
 
         if self.options.shared:
             self.copy("librocksdb.so", dst="lib", src=self.subfolder, keep_path=False)
