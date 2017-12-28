@@ -48,7 +48,6 @@ class RocksdbConan(ConanFile):
         with tools.chdir(self.subfolder):
             env_build = AutoToolsBuildEnvironment(self)
             env_build.fpic = True
-            env_build.libs.append("pthread")
 
             if self.settings.build_type == "Debug":
                 env_build.make()  # $ make
@@ -71,3 +70,5 @@ class RocksdbConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["rocksdb"]
+        if self.settings.os == "Linux":
+            self.cpp_info.libs.append("pthread")
