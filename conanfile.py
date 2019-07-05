@@ -19,8 +19,9 @@ class RocksdbConan(ConanFile):
     requires = (
         "zlib/1.2.11@conan/stable",
         "bzip2/1.0.6@conan/stable",
-        "LZ4/1.8.0@bincrafters/stable"
-        # TODO snappy, zstandard
+        "lz4/1.8.3@bincrafters/stable",
+        "snappy/1.1.7@bincrafters/stable",
+        "zstd/1.4.0@bincrafters/stable"
     )
 
     def source(self):
